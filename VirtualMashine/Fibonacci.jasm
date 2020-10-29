@@ -1,0 +1,21 @@
+assing 1 0 
+assing 2 1
+input 2
+cmp 0 2 3
+jnz 3 7
+display 0
+jump 5000
+cmp 1 2 3
+jnz 3 7
+display 0
+jump 5000
+assing 1 4
+assing 1 5
+assing 2 6
+raise 6
+sum 4 5 4
+subr 4 5 5
+cmp 6 2 3
+jnz 3 -14
+display 4
+jump 5000

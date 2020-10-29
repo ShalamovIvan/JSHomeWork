@@ -1,0 +1,15 @@
+input  0 
+input 1
+eq 0 1 3
+jnz 3 7
+display 0
+jump 5000
+less 0 1 4 
+jnz 4 9
+subr 1 0 1
+inc 6
+subr 0 1 0
+eq 0 1 3
+jnz 3 -21
+display 0
+jump 5000
