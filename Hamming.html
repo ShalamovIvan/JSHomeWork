@@ -37,7 +37,7 @@
                 if (result.errorPosition == -1)
                     errorPlace = "Errors not found";
                 else
-                    errorPlace = `Error occured and was at bit #${result.errorPosition + 1}`;
+                    errorPlace = `Error at bit #${result.errorPosition + 1}`;
                 document.getElementById('placeOfError').textContent = errorPlace;
             }
         </script>
