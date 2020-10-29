@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Hamming code</title>
+        <script>
+            function Encode()
+            {
+                let message = document.getElementById('inputString').value;
+                message = message.split('');
+                for(let i = 0; i < message.length; i++)
+                    message[i] *= 1;
+                let control = new Array();
+                control.push((message[0] + message[1] + message[2]) % 2);
+                control.push((message[1] + message[2] + message[3]) % 2);
+                control.push((message[0] + message[1] + message[3]) % 2);
+                document.getElementById('encodedMessage').value = message.join('') + control.join('');
+            }
+
+            function Decode()
+            {
+                let message = document.getElementById('encodedMessage').value;
+                message = message.split('');
+                for(let i = 0; i < message.length; i++)
+                    message[i] *= 1;
+                let result = message.slice();
+                let syndrome = new Array();
+                syndrome.push((result[0] + result[1] + result[2]) % 2);
+                syndrome.push((result[1] + result[2] + result[3]) % 2);
+                syndrome.push((result[0] + result[1] + result[3]) % 2);
+                for (let i = 0; i < 3; i++)
+                    syndrome[i] = (syndrome[i] + result[4 + i]) % 2;
+                syndromeNumberToErrorPosition = [-1, 6, 5, 3, 4, 0, 2, 1];
+                result.errorPosition = syndromeNumberToErrorPosition[syndrome[0] * 4 + syndrome[1] * 2 + syndrome[2]];
+                if (result.errorPosition != -1)
+                    result[result.errorPosition] = (result[result.errorPosition] + 1) % 2;
+                document.getElementById('correctedMessage').value = result.join('');
+                let placeOfErrorMessage;
+                if (result.errorPosition == -1)
+                    placeOfErrorMessage = "Errors free";
+                else
+                    placeOfErrorMessage = `Error occured and was at bit #${result.errorPosition + 1}`;
+                document.getElementById('placeOfError').textContent = placeOfErrorMessage;
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Hamming code</h1>
+        <p>Type the 4 bit message: <input type='text' id='inputString'></p>
+        <p> <input type='button' value='Encode' onClick='Encode()'> </p>
+        <p>Encoded message: <input type='text' id='encodedMessage'></p>
+        <p> <input type='button' value='Decode' onClick='Decode()'> </p>
+        <p>Corrected message: <input type='text' id='correctedMessage'></p>
+        <p> <span id='placeOfError'> </span> </p>
+    </body>
+</html>
