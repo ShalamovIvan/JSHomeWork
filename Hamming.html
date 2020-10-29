@@ -28,17 +28,17 @@
                 syndrome.push((result[0] + result[1] + result[3]) % 2);
                 for (let i = 0; i < 3; i++)
                     syndrome[i] = (syndrome[i] + result[4 + i]) % 2;
-                syndromeNumberToErrorPosition = [-1, 6, 5, 3, 4, 0, 2, 1];
-                result.errorPosition = syndromeNumberToErrorPosition[syndrome[0] * 4 + syndrome[1] * 2 + syndrome[2]];
+                syndromesArray = [-1, 6, 5, 3, 4, 0, 2, 1];
+                result.errorPosition = syndromesArray[syndrome[0] * 4 + syndrome[1] * 2 + syndrome[2]];
                 if (result.errorPosition != -1)
                     result[result.errorPosition] = (result[result.errorPosition] + 1) % 2;
                 document.getElementById('correctedMessage').value = result.join('');
-                let placeOfErrorMessage;
+                let errorPlace;
                 if (result.errorPosition == -1)
-                    placeOfErrorMessage = "Errors free";
+                    errorPlace = "Errors not found";
                 else
-                    placeOfErrorMessage = `Error occured and was at bit #${result.errorPosition + 1}`;
-                document.getElementById('placeOfError').textContent = placeOfErrorMessage;
+                    errorPlace = `Error occured and was at bit #${result.errorPosition + 1}`;
+                document.getElementById('placeOfError').textContent = errorPlace;
             }
         </script>
     </head>
