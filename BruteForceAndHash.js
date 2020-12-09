@@ -17,20 +17,30 @@ function BruteforceSearch(string, subString)
             continue;
         result.push(i);
     }
-    return result;   
+    console.log('BruteforceSearch: ', result);
 }
 
-function CommonHashSearch(string, subString)
+function HashSearch(string, subString)
 {
-    let subStringHash = 0;
-    let currentHash = 0;
+	let subStringHash = [0, 0, 0];
+    let currentHash = [0, 0, 0];
     let result = new Array();
+    let primeNumber = 17;    
     for (let i = 0; i < subString.length; i++)
     {
-        subStringHash += subString.charCodeAt(i)
-        currentHash += string.charCodeAt(i);
+        subStringHash[0] += subString.charCodeAt(i)
+        currentHash[0] += string.charCodeAt(i);
+
+        subStringHash[1] += Pow(subString.charCodeAt(i), 2)
+        currentHash[1] += Pow(string.charCodeAt(i), 2);
+
+        subStringHash[2] += Pow(primeNumber, subString.charCodeAt(i))
+        currentHash[2] += Pow(primeNumber, string.charCodeAt(i));
+
     }
-    if (subStringHash == currentHash)
+    if (subStringHash[0] == currentHash[0]
+    	|| subStringHash[1] == currentHash[1]
+    	|| subStringHash[2] == currentHash[2])
     {
         isBadSubString = false;
         for (let i = 0; i < subString.length; i++)
@@ -46,8 +56,12 @@ function CommonHashSearch(string, subString)
     }
     for (let j = subString.length; j < string.length; j++)
     {
-        currentHash += -string.charCodeAt(j - subString.length) + string.charCodeAt(j);
-        if (subStringHash == currentHash)
+        currentHash[0] += -string.charCodeAt(j - subString.length) + string.charCodeAt(j);
+        currentHash[1] += -Pow(string.charCodeAt(j - subString.length), 2) + Pow(string.charCodeAt(j), 2);
+		currentHash[2] += -Pow(primeNumber, string.charCodeAt(j - subString.length)) + Pow(primeNumber, string.charCodeAt(j));
+        if (subStringHash[0] == currentHash[0]
+    	|| subStringHash[1] == currentHash[1]
+    	|| subStringHash[2] == currentHash[2])
         {
             isBadSubString = false;
             for (let i = 0; i < subString.length; i++)
@@ -62,98 +76,7 @@ function CommonHashSearch(string, subString)
                 result.push(j - subString.length + 1);
         }
     }
-    return result;
-}
-
-function SqrHashSearch(string, subString)
-{
-    let subStringHash = 0;
-    let currentHash = 0;
-    let result = new Array();
-    for (let i = 0; i < subString.length; i++)
-    {
-        subStringHash += Pow(subString.charCodeAt(i), 2)
-        currentHash += Pow(string.charCodeAt(i), 2);
-    }
-    if (subStringHash == currentHash)
-    {
-        isBadSubString = false;
-        for (let i = 0; i < subString.length; i++)
-        {   
-            if (string[i] != subString[i])
-            {
-                isBadSubString = true;
-                break;
-            }
-        }
-        if (!isBadSubString)
-            result.push(0);
-    }
-    for (let j = subString.length; j < string.length; j++)
-    {
-        currentHash += -Pow(string.charCodeAt(j - subString.length), 2) + Pow(string.charCodeAt(j), 2);
-        if (subStringHash == currentHash)
-        {
-            isBadSubString = false;
-            for (let i = 0; i < subString.length; i++)
-            {   
-                if (string[j - subString.length + 1 + i] != subString[i])
-                {
-                    isBadSubString = true;
-                    break;
-                }
-            }
-            if (!isBadSubString)
-                result.push(j - subString.length + 1);
-        }
-    }
-    return result;
-}
-
-function PrimeHashSearch(string, subString)
-{
-    let subStringHash = 0;
-    let currentHash = 0;
-    let primeNumber = 17;
-    let result = new Array();
-    for (let i = 0; i < subString.length; i++)
-    {
-        subStringHash += Pow(primeNumber, subString.charCodeAt(i))
-        currentHash += Pow(primeNumber, string.charCodeAt(i));
-    }
-    if (subStringHash == currentHash)
-    {
-        isBadSubString = false;
-        for (let i = 0; i < subString.length; i++)
-        {   
-            if (string[i] != subString[i])
-            {
-                isBadSubString = true;
-                break;
-            }
-        }
-        if (!isBadSubString)
-            result.push(0);
-    }
-    for (let j = subString.length; j < string.length; j++)
-    {
-        currentHash += -Pow(primeNumber, string.charCodeAt(j - subString.length)) + Pow(primeNumber, string.charCodeAt(j));
-        if (subStringHash == currentHash)
-        {
-            isBadSubString = false;
-            for (let i = 0; i < subString.length; i++)
-            {   
-                if (string[j - subString.length + 1 + i] != subString[i])
-                {
-                    isBadSubString = true;
-                    break;
-                }
-            }
-            if (!isBadSubString)
-                result.push(j - subString.length + 1);
-        }
-    }
-    return result;
+    console.log('HashSearch: ', result);
 }
 
 function Pow(base, exponent)
@@ -172,8 +95,5 @@ function Pow(base, exponent)
 const fs = require('fs');
 let string = fs.readFileSync(process.argv[2], 'utf8');
 let subString = fs.readFileSync(process.argv[3], 'utf8');
-
-console.log('BruteforceSearch: ', BruteforceSearch(string, subString));
-console.log('CommonHashSearch: ', CommonHashSearch(string, subString));
-console.log('SqrHashSearch: ', SqrHashSearch(string, subString));
-console.log('PrimeHashSearch: ', PrimeHashSearch(string, subString));
+BruteforceSearch(string, subString);
+HashSearch(string, subString);
